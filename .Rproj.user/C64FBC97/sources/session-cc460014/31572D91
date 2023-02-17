@@ -1,11 +1,11 @@
 {
     "id": "31572D91",
-    "path": null,
-    "project_path": null,
+    "path": "~/Documents/Projects/IPBA-14- TimeSeries/arima-model-with-holidays-regressor.R",
+    "project_path": "arima-model-with-holidays-regressor.R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "2023685343",
     "contents": "",
-    "dirty": true,
+    "dirty": false,
     "created": 1676643129336.0,
     "source_on_save": false,
     "relative_order": 4,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "106,0",
-        "scrollLine": "94"
+        "cursorPosition": "124,0",
+        "scrollLine": "106"
     },
     "folds": "",
-    "lastKnownWriteTime": 0,
-    "encoding": "",
+    "lastKnownWriteTime": 1676650897,
+    "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1676646788988,
+    "last_content_update": 1676650897841,
     "read_only": false,
     "read_only_alternatives": []
 }
