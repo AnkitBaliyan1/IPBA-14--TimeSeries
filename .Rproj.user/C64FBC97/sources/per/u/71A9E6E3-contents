@@ -1,0 +1,111 @@
+# clear existing environment 
+rm(list=ls(all=TRUE))
+
+# importing library
+library("tseries")
+library("forecast")
+library("dplyr")
+
+# import data
+train<-read.csv("train.csv", na.strings = "")
+test<-read.csv("test.csv",na.strings = "")
+holidays<-read.csv("holidays.csv", na.strings = "")
+
+# plot area
+par(mfrow=c(1,1))
+
+# reading date columns as.Date
+train$date=as.Date(train$date, format = '%d-%m-%Y')
+
+# understand dataset 
+View(train)
+plot(train[,2], type='l')
+colSums(is.na(train))
+summary(train)
+boxplot(train$transactions)
+
+
+# Use complete function to find missing date
+complete_train <- complete(train, date = seq(min(train$date), 
+                                             max(train$date), 
+                                             by = "day"))
+# finding missing values
+colSums(is.na(complete_train))
+complete_train %>% 
+  filter(is.na(transactions))
+
+# converting it into time series 
+ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
+
+# sub set 2013
+win_train<- ts_train[1:358]
+win_train<-ts(win_train, start=c(2013,1), frequency = 365)
+win_train
+
+# forecast the missing value 
+mod<- auto.arima(win_train)
+na_2013<-forecast(mod,1)
+plot(win_train, type='l', main='Plot from start to 24-12-2013')
+lines(mod$fitted, col='yellow')
+lines(na_2013$mean, col='red')
+complete_train$transactions[359]<-na_2013$mean
+
+
+
+
+# ------- 2014
+
+# converting it into time series 
+ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
+plot(ts_train)
+win_train<- ts_train[1:723]
+win_train_ts<-ts(win_train, start=c(2013,1), frequency = 365)
+win_train_ts
+
+# forecast the missing value 
+mod<- auto.arima(win_train_ts)
+na_2014<-forecast(mod,1)
+plot(win_train_ts, type='l', main='Plot from start to 24-12-2014')
+lines(mod$fitted, col='yellow')
+lines(na_2013$mean, col='red')
+complete_train$transactions[724]<-na_2014$mean
+
+
+# ------- 2015
+
+# converting it into time series 
+ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
+plot(ts_train, type='l')
+win_train<- ts_train[1:1088]
+win_train_ts<-ts(win_train, start=c(2013,1), frequency = 365)
+#win_train_ts
+
+# forecast the missing value 
+mod<- auto.arima(win_train_ts)
+na_2015<-forecast(mod,1)
+plot(win_train_ts, type='l', main='Plot from start to 24-12-2014')
+lines(mod$fitted, col='yellow')
+lines(na_2015$mean, col='red')
+complete_train$transactions[1089]<-na_2015$mean
+
+
+# ------- 2016
+
+# converting it into time series 
+ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
+plot(ts_train, type='l')
+win_train<- ts_train[1:1454]
+win_train_ts<-ts(win_train, start=c(2013,1), frequency = 365)
+win_train_ts
+
+# forecast the missing value 
+mod<- auto.arima(win_train_ts)
+na_2016<-forecast(mod,1)
+plot(win_train_ts, type='l', main='Plot from start to 24-12-2014')
+lines(mod$fitted, col='yellow')
+lines(na_2016$mean, col='red')
+complete_train$transactions[1455]<-na_2015$mean
+
+
+complete_train %>%
+  filter(is.na(transactions))
