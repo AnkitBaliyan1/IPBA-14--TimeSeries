@@ -1,27 +1,27 @@
 {
-    "id": "9FBEFEE2",
+    "id": "31572D91",
     "path": null,
     "project_path": null,
     "type": "r_source",
     "hash": "0",
     "contents": "",
     "dirty": true,
-    "created": 1676481270681.0,
+    "created": 1676643129336.0,
     "source_on_save": false,
     "relative_order": 4,
     "properties": {
-        "tempName": "Untitled2",
+        "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "171,0",
-        "scrollLine": "0"
+        "cursorPosition": "106,0",
+        "scrollLine": "94"
     },
-    "folds": "41|26|55|0|\n",
+    "folds": "",
     "lastKnownWriteTime": 0,
     "encoding": "",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1676561967655,
+    "last_content_update": 1676646788988,
     "read_only": false,
     "read_only_alternatives": []
 }

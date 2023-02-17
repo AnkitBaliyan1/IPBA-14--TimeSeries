@@ -3,7 +3,7 @@
     "path": "~/Documents/Projects/IPBA-14- TimeSeries/hw+mean(u&L).R",
     "project_path": "hw+mean(u&L).R",
     "type": "r_source",
-    "hash": "0",
+    "hash": "2414332495",
     "contents": "",
     "dirty": false,
     "created": 1676562802274.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled3",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "73,0",
-        "scrollLine": "41"
+        "cursorPosition": "91,51",
+        "scrollLine": "70"
     },
-    "folds": "46|26|60|0|\n",
-    "lastKnownWriteTime": 1676571394,
+    "folds": "",
+    "lastKnownWriteTime": 1676643982,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1676641905858,
+    "last_content_update": 1676643982087,
     "read_only": false,
     "read_only_alternatives": []
 }
