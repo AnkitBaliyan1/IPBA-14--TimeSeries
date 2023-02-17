@@ -61,13 +61,6 @@ which(is.na(ts_train))
 miss<-as.numeric(strsplit(as.character(which(is.na(ts_train))), split="\\."))
 class(miss)
 
-for (i in miss) {
-  print(ts_train[i-1])
-  print((ts_train[i-1]+ts_train[i+1])/2)
-  print(ts_train[i+1])
-  print('next value')
-}
-
 # missing value row number: 
 # 2013-12-25	359 
 # 2014-12-25	724 
