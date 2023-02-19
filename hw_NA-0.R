@@ -6,6 +6,7 @@
 library("tseries")
 library("forecast")
 library("dplyr")
+library("lubridate")
 library("tidyr") #-- use complete function
 library("ggplot2") # to convert the ts object back to dataframe
 
@@ -43,8 +44,9 @@ ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
 plot(ts_train, type='l')
 paste('Number of NA in dataset:', sum(is.na(ts_train)))
 
-
 which(is.na(ts_train))
+
+
 miss<-as.numeric(strsplit(as.character(which(is.na(ts_train))), split="\\."))
 class(miss)
 
@@ -60,11 +62,7 @@ any(is.na(ts_train))
 # 2016-12-25	1455 
 
 for (i in miss) {
-  print(ts_train[i-1])
-  print((ts_train[i-1]+ts_train[i+1])/2)
-  print(ts_train[i+1])
-  print('next value')
-  ts_train[i]<-(ts_train[i-1]+ts_train[i+1])/2
+  ts_train[i]<-0
 }
 
 any(is.na(ts_train))
@@ -90,7 +88,8 @@ submission_file$transactions<-NA
 submission_file$transactions<-hw_final_pred$mean
 
 Box.test(hw_final_pred$residuals, type='Ljung-Box')
+checkresiduals(hw_final_pred$residuals)
 
-#write.csv(submission_file, 'hw_with_mean.csv', row.names = FALSE)
+# write.csv(submission_file, 'hw_na=0.csv', row.names = FALSE)
 
 

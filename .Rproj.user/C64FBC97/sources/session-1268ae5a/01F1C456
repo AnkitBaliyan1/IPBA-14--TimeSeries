@@ -1,0 +1,27 @@
+{
+    "id": "01F1C456",
+    "path": "~/Documents/Projects/IPBA-14- TimeSeries/basic prophet.R",
+    "project_path": "basic prophet.R",
+    "type": "r_source",
+    "hash": "1082718559",
+    "contents": "",
+    "dirty": false,
+    "created": 1676764184107.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "69,32",
+        "scrollLine": "51"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1676793921,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1676793921196,
+    "read_only": false,
+    "read_only_alternatives": []
+}

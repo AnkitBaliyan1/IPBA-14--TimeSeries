@@ -123,8 +123,9 @@ submission_file$transactions<-NA
 submission_file$hw<-hw_final_pred_h$mean
 
 Box.test(ar_pred_h$residuals, type='Ljung-Box')
+acf(ar_pred_h$residuals, lag=20)
+plot(ar_pred_h$residuals)
+hist(ar_pred_h$residuals, freq = FALSE)
 
-#write.csv(submission_file, 
-          'arima_model with holidays regressor.csv', 
-          row.names = FALSE
-          )
+#write.csv(
+ # submission_file,'arima_model with holidays regressor.csv', row.names = FALSE)

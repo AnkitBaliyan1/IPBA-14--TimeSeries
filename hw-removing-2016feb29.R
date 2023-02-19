@@ -6,6 +6,7 @@
 library("tseries")
 library("forecast")
 library("dplyr")
+library("lubridate")
 library("tidyr") #-- use complete function
 library("ggplot2") # to convert the ts object back to dataframe
 
@@ -28,39 +29,35 @@ summary(train)
 boxplot(train$transactions)
 
 # Use complete function to find missing date
-complete_train <- complete(train, date = seq(min(train$date), 
-                                             max(train$date), 
-                                             by = "day"))
+complete_train <- data.frame(complete(train, date = seq(min(train$date), 
+                                                        max(train$date), 
+                                                        by = "day")))
+complete_train$date=as.Date(complete_train$date, format = '%d-%m-%Y')
+class(complete_train)
+
 # finding missing values
 colSums(is.na(complete_train))
 complete_train %>% 
   filter(is.na(transactions))
 
+
+complete_train %>% 
+  filter(month(date)==02 & day(date)==29)
+
+complete_train=complete_train %>%
+  filter(date != as.Date('2016-02-29'))
+
 ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
 plot(ts_train, type='l')
 paste('Number of NA in dataset:', sum(is.na(ts_train)))
-
-
-fill_miss<- function(loc){
-  till_loc<-ts_train[1:loc-1]
-  till_loc_ts<-ts(till_loc, start=c(2013,1), frequency=365) # to get the plot 
-  # with time reference
-  
-  # building model and forcasting
-  mod<- auto.arima(till_loc_ts)
-  val_fill<-forecast(mod,1)
-  
-  # plot
-  plot(till_loc_ts, type='l')
-  lines(mod$fitted, col='yellow')
-  lines(val_fill$mean, col='red')
-  return(val_fill$mean)
-}
 
 which(is.na(ts_train))
 miss<-as.numeric(strsplit(as.character(which(is.na(ts_train))), split="\\."))
 class(miss)
 
+
+summary(ts_train)
+any(is.na(ts_train))
 # missing value row number: 
 # 2013-12-25	359 
 # 2014-12-25	724 
@@ -69,19 +66,9 @@ class(miss)
 # 2016-01-03	1098 
 # 2016-12-25	1455 
 
-# 2013-12-25	359
-ts_train[359]<-fill_miss(359)
-# 2014-12-25	724
-ts_train[724]<-fill_miss(724)
-# 2015-12-25	1089
-ts_train[1089]<-fill_miss(1089)
-# 2016-01-01	1096
-ts_train[1096]<-fill_miss(1096)
-# 2016-01-03	1098
-ts_train[1098]<-fill_miss(1098)
-# 2016-12-25	1455
-ts_train[1455]<-fill_miss(1455)
-
+for (i in miss) {
+  ts_train[i]<-(ts_train[i-1]+ts_train[i+1])/2
+}
 
 any(is.na(ts_train))
 
@@ -90,6 +77,8 @@ any(is.na(ts_train))
 # building model for future forcast 
 acf(ts_train)
 pacf(ts_train)
+
+adf.test(ts_train)
 
 # using ts_train to train the arima model 
 hw_final<-HoltWinters(ts_train)
@@ -103,4 +92,9 @@ submission_file<-sample_submission
 submission_file$transactions<-NA
 submission_file$transactions<-hw_final_pred$mean
 
-#write.csv(submission_file, 'forecast_file.csv', row.names = FALSE)
+Box.test(hw_final_pred$residuals, type='Ljung-Box')
+checkresiduals(hw_final_pred$residuals)
+
+#write.csv(submission_file, 'hw-removing-2016feb29.csv', row.names = FALSE)
+# stlf
+

@@ -1,11 +1,12 @@
 # clear existing environment 
-rm(list=ls(all=TRUE))
+#rm(list=ls(all=TRUE))
 
 
 # importing library
 library("tseries")
 library("forecast")
 library("dplyr")
+library("lubridate")
 library("tidyr") #-- use complete function
 library("ggplot2") # to convert the ts object back to dataframe
 
@@ -39,29 +40,35 @@ colSums(is.na(complete_train))
 complete_train %>% 
   filter(is.na(transactions))
 
+
+complete_train %>% 
+  filter(month(date)==02 & day(date)==29)
+
+complete_train=complete_train %>%
+  filter(date != as.Date('2016-02-29'))
+
 ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
 plot(ts_train, type='l')
 paste('Number of NA in dataset:', sum(is.na(ts_train)))
 
+which(is.na(ts_train))
 miss<-as.numeric(strsplit(as.character(which(is.na(ts_train))), split="\\."))
+class(miss)
 
-data.frame(complete_train %>% 
-             group_by(year(date)) %>%
-             summarise(mean(transactions, na.rm=TRUE)))-> mean_table
-names(mean_table)<-c('year','mean')
 
-na_fill<- function(index){
-  for (y in seq(1:length(mean_table$year))){
-    if (mean_table[y,1] == year(complete_train$date[index])){
-      return(mean_table[y,2])
-    }
-  }
-}
+summary(ts_train)
+any(is.na(ts_train))
+# missing value row number: 
+# 2013-12-25	359 
+# 2014-12-25	724 
+# 2015-12-25	1089 
+# 2016-01-01	1096 
+# 2016-01-03	1098 
+# 2016-12-25	1455 
 
 for (i in miss) {
-  ts_train[i]<-na_fill(i)
+  ts_train[i]<-(ts_train[i-1]+ts_train[i+1])/2
 }
-
 
 any(is.na(ts_train))
 
@@ -85,4 +92,9 @@ submission_file<-sample_submission
 submission_file$transactions<-NA
 submission_file$transactions<-hw_final_pred$mean
 
-write.csv(submission_file, 'hw & yearly_mean_at_na.csv', row.names = FALSE)
+Box.test(hw_final_pred$residuals, type='Ljung-Box')
+checkresiduals(hw_final_pred$residuals)
+
+#write.csv(submission_file, 'hw-removing-2016feb29.csv', row.names = FALSE)
+# stlf
+
