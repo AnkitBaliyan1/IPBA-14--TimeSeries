@@ -1,9 +1,0 @@
-# create two sample data frames
-df1 <- data.frame(x = c(1, 2, 3), y = c("a", "b", "c"))
-df2 <- data.frame(x = c(4, 5, 6), y = c("d", "e", "f"))
-
-# vertically bind the two data frames
-df_combined <- rbind(df1, df2)
-
-# print the resulting data frame
-print(df_combined)

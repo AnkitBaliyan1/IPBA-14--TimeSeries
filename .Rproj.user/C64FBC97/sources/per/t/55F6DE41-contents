@@ -40,24 +40,6 @@ colSums(is.na(complete_train))
 complete_train %>% 
   filter(is.na(transactions))
 
-
-complete_train %>% 
-  filter(month(date)==02 & day(date)==29)
-
-complete_train=complete_train %>%
-  filter(date != as.Date('2016-02-29'))
-
-ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
-plot(ts_train, type='l')
-paste('Number of NA in dataset:', sum(is.na(ts_train)))
-
-which(is.na(ts_train))
-miss<-as.numeric(strsplit(as.character(which(is.na(ts_train))), split="\\."))
-class(miss)
-
-
-summary(ts_train)
-any(is.na(ts_train))
 # missing value row number: 
 # 2013-12-25	359 
 # 2014-12-25	724 
@@ -66,15 +48,46 @@ any(is.na(ts_train))
 # 2016-01-03	1098 
 # 2016-12-25	1455 
 
-for (i in miss) {
-  ts_train[i]<-(ts_train[i-1]+ts_train[i+1])/2
-}
+complete_train %>% 
+  filter(date=='2016-01-01') %>%
+  select(transactions) 
+complete_train %>%
+  filter(month(date)==01 & day(date)==03) %>%
+  summarise(m = mean(transactions, na.rm=TRUE))
 
+class(complete_train$transactions)
+
+fill_1<-complete_train %>%
+  filter(month(date)==01 & day(date)==01) %>%
+  summarise(m = mean(transactions, na.rm=TRUE))
+fill_3<-complete_train %>%
+  filter(month(date)==01 & day(date)==03) %>%
+  summarise(m = mean(transactions, na.rm=TRUE))
+
+complete_train$transactions<-ifelse(complete_train$date=='2016-01-01', 
+                                    as.numeric(fill_1)
+                                    ,ifelse(complete_train$date=='2016-01-03', 
+                                    as.numeric(fill_3)
+                                    ,complete_train$transactions))
+
+complete_train$transactions<-ifelse(is.na(complete_train$transactions),0,complete_train$transactions)
+
+complete_train <- complete_train %>% filter(date != as.Date('2016-02-29'))
+
+
+ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
+plot(ts_train, type='l')
+paste('Number of NA in dataset:', sum(is.na(ts_train)))
+
+which(is.na(ts_train))
+
+summary(ts_train)
 any(is.na(ts_train))
 
 # no NA value in the series now 
 
 # building model for future forcast 
+plot(decompose(ts_train))
 acf(ts_train)
 pacf(ts_train)
 
@@ -95,6 +108,6 @@ submission_file$transactions<-hw_final_pred$mean
 Box.test(hw_final_pred$residuals, type='Ljung-Box')
 checkresiduals(hw_final_pred$residuals)
 
-#write.csv(submission_file, 'hw-removing-2016feb29.csv', row.names = FALSE)
-# stlf
+#write.csv(submission_file, 'hw-rm@29_0(25)-na(avg_day).csv', row.names = FALSE)
+
 
