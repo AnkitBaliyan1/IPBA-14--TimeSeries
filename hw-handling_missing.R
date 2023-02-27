@@ -95,6 +95,7 @@ adf.test(ts_train)
 
 # using ts_train to train the arima model 
 hw_final<-HoltWinters(ts_train)
+accuracy(hw_final$fitted, ts_train)
 
 hw_final_pred<-forecast(hw_final, length(test$date))
 plot(hw_final_pred)
@@ -103,11 +104,10 @@ plot(hw_final_pred)
 sample_submission<-read.csv("sample_submission.csv")
 submission_file<-sample_submission
 submission_file$transactions<-NA
-submission_file$transactions<-hw_final_pred$mean
+submission_file$transactions<-round(hw_final_pred$mean)
 
 Box.test(hw_final_pred$residuals, type='Ljung-Box')
 checkresiduals(hw_final_pred$residuals)
 
-#write.csv(submission_file, 'hw-rm@29_0(25)-na(avg_day).csv', row.names = FALSE)
-
+#write.csv(submission_file, 'round_hw-rm@29_0(25)-na(avg_day).csv', row.names = FALSE)
 

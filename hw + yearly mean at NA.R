@@ -39,11 +39,8 @@ colSums(is.na(complete_train))
 complete_train %>% 
   filter(is.na(transactions))
 
-ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
-plot(ts_train, type='l')
-paste('Number of NA in dataset:', sum(is.na(ts_train)))
-
-miss<-as.numeric(strsplit(as.character(which(is.na(ts_train))), split="\\."))
+#miss<-as.numeric(strsplit(as.character(which(is.na(ts_train))), split="\\."))
+miss<-as.numeric(strsplit(as.character(which(is.na(complete_train$transactions))), split="\\."))
 
 data.frame(complete_train %>% 
              group_by(year(date)) %>%
@@ -59,11 +56,15 @@ na_fill<- function(index){
 }
 
 for (i in miss) {
-  ts_train[i]<-na_fill(i)
+  complete_train$transactions[i]<-na_fill(i)
 }
 
 
-any(is.na(ts_train))
+any(is.na(complete_train$transactions))
+
+ts_train<-ts(complete_train$transactions, start=c(2013,1), frequency = 365)
+plot(ts_train, type='l')
+paste('Number of NA in dataset:', sum(is.na(ts_train)))
 
 # no NA value in the series now 
 
